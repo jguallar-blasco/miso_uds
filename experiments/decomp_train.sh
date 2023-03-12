@@ -117,6 +117,7 @@ function eval_attr() {
     --batch-size 32 \
     --beam-size 1 \
     --use-dataset-reader \
+    --line-limit 2 \
     --save-pred-path ${CHECKPOINT_DIR}/${TEST_DATA}_graphs.pkl\
     --cuda-device -1 \
     --include-package miso.data.dataset_readers \
@@ -124,7 +125,7 @@ function eval_attr() {
     --include-package miso.models \
     --include-package miso.modules.seq2seq_encoders \
     --include-package miso.predictors \
-    --include-package miso.metrics &> ${CHECKPOINT_DIR}/${TEST_DATA}.attr_struct.out
+    --include-package miso.metrics 
 }
 
 function spr_eval() {
@@ -138,6 +139,7 @@ function spr_eval() {
     ${model_file} ${TEST_DATA} \
     --predictor "decomp_parsing" \
     --use-dataset-reader \
+    --line-limit 2 \
     --batch-size 32 \
     --oracle \
     --json-output-file ${CHECKPOINT_DIR}/${TEST_DATA}/data.json\
@@ -147,7 +149,7 @@ function spr_eval() {
     --include-package miso.modules.seq2seq_encoders \
     --include-package miso.predictors \
     --include-package miso.metrics \
-    --cuda-device 0 &> ${CHECKPOINT_DIR}/${TEST_DATA}.pearson.out
+    --cuda-device 0 
 }
 
 function conllu_eval() {

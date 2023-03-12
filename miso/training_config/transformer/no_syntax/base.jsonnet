@@ -133,7 +133,7 @@
                 "target_tokens": {
                     "type": "embedding",
                     "embedding_dim": 300,
-                    "pretrained_file": "/exp/estengel/miso/glove.840B.300d.zip",
+                    "pretrained_file": "/brtx/603-nvme2/jgualla1/glove.840B.300d.zip",
                     "trainable": true,
                     "vocab_namespace": "target_tokens"
                 }
@@ -238,7 +238,7 @@
     "trainer": {
         "validation_data_path": "dev",
         "type": "decomp_parsing",
-        "cuda_device": 0,
+        "cuda_device": -1,
         "drop_syntax": true,
         "grad_clipping": null,
         "grad_norm": 5,

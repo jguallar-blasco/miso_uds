@@ -469,8 +469,9 @@ class DecompTransformerParser(DecompParser):
             valid_node_mask=inputs["valid_node_mask"]
         )
 
-        loss = node_pred_loss["loss_per_node"] + edge_pred_loss["loss_per_node"] + \
-               node_attribute_outputs['loss'] + edge_attribute_outputs['loss']
+        #loss = node_pred_loss["loss_per_node"] + edge_pred_loss["loss_per_node"] + \
+        loss = node_attribute_outputs['loss'] + edge_attribute_outputs['loss']
+		# deleted node_pred_loss and edge_pred_loss
 
         # compute combined pearson 
         self._decomp_metrics(None, None, None, None, "both")
