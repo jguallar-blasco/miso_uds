@@ -193,7 +193,7 @@
                 "source_tokens": {
                     "type": "embedding",
                     "embedding_dim": 300,
-                    "pretrained_file": "/exp/estengel/miso/glove.840B.300d.zip",
+                    "pretrained_file": "/brtx/603-nvme2/jgualla1/glove.840B.300d.zip",
                     "trainable": true,
                     "vocab_namespace": "source_tokens"
                 }
@@ -238,7 +238,7 @@
     "trainer": {
         "validation_data_path": "dev",
         "type": "decomp_parsing",
-        "cuda_device": -1,
+        "cuda_device": 0,
         "drop_syntax": true,
         "grad_clipping": null,
         "grad_norm": 5,
@@ -261,11 +261,11 @@
             "lr": 0,
             "weight_decay": 3e-09
         },
-        "patience": 51,
+        "patience": 20,
         "semantics_only": false,
-        "validation_metric": "+s_f1",
+        "validation_metric": "+pearson",
         "validation_prediction_path": "decomp_validation.txt",
-        "warmup_epochs": 49
+        "warmup_epochs": 5
     },
     "vocabulary": {
         "max_vocab_size": {
