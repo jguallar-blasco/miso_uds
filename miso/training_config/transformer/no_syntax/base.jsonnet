@@ -75,7 +75,7 @@
             },
             "hidden_size": 512,
             "input_size": 400,
-            "num_layers": 8,
+            "num_layers": 4,
             "source_attention_layer": {
                 "type": "global",
                 "attention": {
@@ -248,7 +248,7 @@
             "warmup_steps": 8000
         },
         "no_grad": [],
-        "num_epochs": 450,
+        "num_epochs": 50,
         "num_serialized_models_to_keep": 1,
         "optimizer": {
             "type": "adam",

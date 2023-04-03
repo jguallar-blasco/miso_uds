@@ -468,7 +468,7 @@ class DecompTransformerParser(DecompParser):
             gold_edge_types=inputs["edge_types"],
             valid_node_mask=inputs["valid_node_mask"]
         )
-
+	# Remove node_predicate loss and edge_predicate loss
         #loss = node_pred_loss["loss_per_node"] + edge_pred_loss["loss_per_node"] + \
         loss = node_attribute_outputs['loss'] + edge_attribute_outputs['loss']
 		# deleted node_pred_loss and edge_pred_loss
