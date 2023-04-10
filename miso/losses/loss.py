@@ -13,7 +13,7 @@ class LossFunctionDict(dict):
         self['MSELoss'] = MSELoss()
         self['L1Loss'] = L1Loss()
         self['MSECrossEntropyLoss'] = MSECrossEntropyLoss()
-	self['BCEWithLogitsLoss'] = BCEWithLogitsLoss()
+        self['BCEWithLogitsLoss'] = BCEWithLogitsLoss()
 
 class Loss(torch.nn.Module, Registrable): 
     def __init__(self):
