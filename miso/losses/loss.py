@@ -2,7 +2,7 @@ import torch
 from torch.nn import MSELoss, L1Loss, BCELoss, BCEWithLogitsLoss
 from allennlp.common import Registrable
 from torch.nn import functional as F
-from torhc.nn import _reduction as _Reduction
+from torch.nn import _reduction as _Reduction
 from torch.nn import Tensor
 from typing import Callable, Optional
 
