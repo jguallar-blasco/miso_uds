@@ -166,7 +166,7 @@
             },
             "hidden_size": 512,
             "input_size": 1118,
-            "num_layers": 7
+            "num_layers": 4
         },
         "encoder_pos_embedding": {
             "embedding_dim": 100,
@@ -214,8 +214,8 @@
             "hidden_dim": 1024,
             "input_dim": 512,
             "loss_multiplier": 10,
-            "n_layers": 4,
-            "output_dim": 44
+            "n_layers": 7,
+            "output_dim": 1
         },
         "pos_tag_namespace": "pos_tags",
         "target_output_namespace": "generation_tokens",

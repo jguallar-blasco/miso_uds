@@ -134,6 +134,7 @@ class NodeAttributeDecoder(torch.nn.Module):
                    params['output_dim'],
                    params['n_layers'],
                    params.get("loss_multiplier", 10),
-                   params.get("loss_function",  MSECrossEntropyLoss()), 
+		   params.get("loss_function",  BCEWithLogitsLoss()),
+                   #params.get("loss_function",  MSECrossEntropyLoss()), 
                    params.get("activation", torch.nn.ReLU()),
                    params.get("share_networks", False))

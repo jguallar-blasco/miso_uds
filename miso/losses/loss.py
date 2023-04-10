@@ -1,6 +1,10 @@
 import torch
-from torch.nn import MSELoss, L1Loss, BCELoss
+from torch.nn import MSELoss, L1Loss, BCELoss, BCEWithLogitsLoss
 from allennlp.common import Registrable
+from torch.nn import functional as F
+from torhc.nn import _reduction as _Reduction
+from torch.nn import Tensor
+from typing import Callable, Optional
 
 
 class LossFunctionDict(dict):
@@ -9,6 +13,7 @@ class LossFunctionDict(dict):
         self['MSELoss'] = MSELoss()
         self['L1Loss'] = L1Loss()
         self['MSECrossEntropyLoss'] = MSECrossEntropyLoss()
+	self['BCEWithLogitsLoss'] = BCEWithLogitsLoss()
 
 class Loss(torch.nn.Module, Registrable): 
     def __init__(self):
@@ -39,5 +44,22 @@ class MSECrossEntropyLoss(Loss):
             harmonic_mean = xent_value + mse_value
         return harmonic_mean
 
+#BCEWithLogitsLoss
+@Loss.register("bce_with_logits_loss")
+class BCEWithLogitsLoss(Loss):
+    def __init__(self, weight: Optional[Tensor] = None, size_average=None, reduce=None, reduction: str = 'mean',
+                 pos_weight: Optional[Tensor] = None) -> None:
+        super().__init__(size_average, reduce, reduction)
+        self.register_buffer('weight', weight)
+        self.register_buffer('pos_weight', pos_weight)
+        self.weight: Optional[Tensor]
+        self.pos_weight: Optional[Tensor]
+
+    def forward(self, input: Tensor, target: Tensor) -> Tensor:
+        return F.binary_cross_entropy_with_logits(input, target,
+                                                  self.weight,
+                                                  pos_weight=self.pos_weight,
+                                                  reduction=self.reduction)
+	
         
     
