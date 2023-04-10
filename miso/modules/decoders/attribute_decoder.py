@@ -3,7 +3,7 @@ import torch
 import logging
 
 from miso.metrics.continuous_metrics import ContinuousMetric
-from miso.losses.loss import MSECrossEntropyLoss, Loss
+from miso.losses.loss import BCEWithLogitsLoss, MSECrossEntropyLoss, Loss
 from scipy.stats import pearsonr 
 
 logger = logging.getLogger(__name__) 
