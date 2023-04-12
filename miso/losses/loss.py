@@ -54,7 +54,7 @@ class BCEWithLogitsLoss(Loss):
         self.register_buffer('pos_weight', pos_weight)
         self.weight: Optional[Tensor]
         self.pos_weight: Optional[Tensor]
-        self.reduction = reduce 
+        self.reduction = reduction
 
     def forward(self, input: Tensor, target: Tensor) -> Tensor:
         return F.binary_cross_entropy_with_logits(input, target,
