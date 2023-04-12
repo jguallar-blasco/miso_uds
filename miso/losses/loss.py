@@ -63,4 +63,3 @@ class BCEWithLogitsLoss(Loss):
                                                   reduction=self.reduction)
 	
         
-    

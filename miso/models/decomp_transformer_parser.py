@@ -429,6 +429,7 @@ class DecompTransformerParser(DecompParser):
         )
 
         # compute node attributes
+        # This is still being computed
         node_attribute_outputs = self._node_attribute_predict(
             decoding_outputs["outputs"][:,:-1,:],
             inputs["node_attribute_truth"],
@@ -440,7 +441,7 @@ class DecompTransformerParser(DecompParser):
             edge_head_mask=inputs["edge_head_mask"],
             edge_heads=inputs["edge_heads"]
         )
-
+        # This is still being computed
         edge_attribute_outputs = self._edge_attribute_predict(
                 edge_prediction_outputs["edge_type_query"],
                 edge_prediction_outputs["edge_type_key"],

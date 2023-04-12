@@ -485,17 +485,6 @@ def _from_params(cls,  # type: ignore
     model_save_interval = params.pop_float("model_save_interval", None)
     summary_interval = params.pop_int("summary_interval", 100)
     histogram_interval = params.pop_int("histogram_interval", None)
-    should_log_parameter_statistics = params.pop_bool("should_log_parameter_statistics", True)
-    should_log_learning_rate = params.pop_bool("should_log_learning_rate", False)
-    log_batch_size_period = params.pop_int("log_batch_size_period", None)
-    syntactic_method = params.pop("syntactic_method", None)
-    accumulate_batches = params.pop("accumulate_batches", 1) 
-
-    params.assert_empty(cls.__name__)
-    return cls(model=model,
-               optimizer=optimizer,
-               bert_optimizer=bert_optimizer,
-               iterator=iterator,
                train_dataset=train_data,
                validation_dataset=validation_data,
                validation_data_path=validation_data_path,

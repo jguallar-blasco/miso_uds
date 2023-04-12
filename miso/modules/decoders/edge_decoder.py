@@ -88,7 +88,10 @@ class EdgeAttributeDecoder(torch.nn.Module):
             to_mult = edge_mask_mask_binary
          
         predicted_attrs = predicted_attrs * to_mult
+        # Binarize predicted_attrs
+        #predicted_attrs = torch.gt(predicted_attrs, 0).float()
         target = target * to_mult
+        target = torch.gt(target, 0).float()
         
         attr_loss = self.loss_function(predicted_attrs, target) * self.loss_multiplier
         mask_loss = self.mask_loss_function(predicted_mask, edge_mask_binary) * self.loss_multiplier

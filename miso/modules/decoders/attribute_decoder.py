@@ -103,6 +103,7 @@ class NodeAttributeDecoder(torch.nn.Module):
         # mask out non-predicted stuff
         to_mult = mask 
         mask_binary = torch.gt(mask, 0).float()
+        #mask_binary = torch.gt(predicted_attrs, 0).float()
 
         if self.binary:
             to_mult = mask_binary
@@ -116,6 +117,8 @@ class NodeAttributeDecoder(torch.nn.Module):
 
         predicted_attrs = predicted_attrs[mask_binary==1]
         target_attrs = target_attrs[mask_binary==1]
+        # Want to binarize the target_attrs
+        target_attrs = torch.gt(target_attrs, 0).float()
 
         flat_pred = predicted_attrs.reshape(-1).detach().cpu().numpy()
         flat_true = target_attrs.reshape(-1).detach().cpu().numpy()

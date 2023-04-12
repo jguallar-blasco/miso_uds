@@ -5,8 +5,9 @@
 #SBATCH --gpus=4
 
 export CUDA_VISIBLE_DEVICES=4
-export CHECKPOINT_DIR=/brtx/603-nvme2/jgualla1/full_4layertransformer_7layerattr_lessattr_6/ 
-export TRAINING_CONFIG=/home/jgualla1/why_ambiguity_2023/miso_uds/miso/training_config/transformer/no_syntax/base.jsonnet
+export CHECKPOINT_DIR=/brtx/603-nvme2/jgualla1/$1/ 
+export TRAINING_CONFIG=/home/jgualla1/why_ambiguity_2023/miso_uds/test/configs/overfit_decomp_transformer.jsonnet
+#export TRAINING_CONFIG=/home/jgualla1/why_ambiguity_2023/miso_uds/miso/training_config/transformer/no_syntax/base.jsonnet
 
-#./experiments/decomp_train.sh -a train
-./experiments/decomp_train.sh -a spr_eval /brtx/603-nvme2/jgualla1/full_4layertransformer_7layerattr_lessattr_6/
+./experiments/decomp_train.sh -a train
+#./experiments/decomp_train.sh -a spr_eval /brtx/603-nvme2/jgualla1/full_4layertransformer_7layerattr_lessattr_6/
