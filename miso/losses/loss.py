@@ -49,7 +49,7 @@ class MSECrossEntropyLoss(Loss):
 class BCEWithLogitsLoss(Loss):
     def __init__(self, weight: Optional[Tensor] = None, size_average=None, reduce=None, reduction: str = 'mean',
                  pos_weight: Optional[Tensor] = None) -> None:
-        super().__init__(size_average, reduce, reduction)
+        super(BCEWithLogitsLoss, self).__init__()
         self.register_buffer('weight', weight)
         self.register_buffer('pos_weight', pos_weight)
         self.weight: Optional[Tensor]
