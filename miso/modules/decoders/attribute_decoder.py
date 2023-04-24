@@ -1,6 +1,7 @@
 import numpy as np
 import torch
 import logging
+import pdb
 
 from miso.metrics.continuous_metrics import ContinuousMetric
 from miso.losses.loss import BCEWithLogitsLoss, MSECrossEntropyLoss, Loss
@@ -112,6 +113,7 @@ class NodeAttributeDecoder(torch.nn.Module):
         target_attrs = target_attrs * to_mult
 
         attr_loss = self.attr_loss_function(predicted_attrs, target_attrs) * self.loss_multiplier
+ 
         # see if annotated at all; don't model annotator confidence, already modeled above
         mask_loss = self.mask_loss_function(predicted_mask, mask_binary) * self.loss_multiplier
 

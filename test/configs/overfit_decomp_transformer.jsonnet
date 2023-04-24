@@ -225,16 +225,16 @@ local glove_embeddings = "/exp/estengel/miso/glove.840B.300d.zip";
     node_attribute_module: {
         input_dim: 64,
         hidden_dim: 128,
-        output_dim: 44,
+        output_dim: 1,
         n_layers: 4, 
-        loss_multiplier: 10,
+        loss_multiplier: 1,
     },
     edge_attribute_module: {
         h_input_dim: 32,
         hidden_dim: 200,
         output_dim: 14,
         n_layers: 4, 
-        loss_multiplier: 10,
+        loss_multiplier: 1,
     },
     label_smoothing: {
         smoothing: 0.0,
@@ -262,7 +262,7 @@ local glove_embeddings = "/exp/estengel/miso/glove.840B.300d.zip";
   trainer: {
     type: "decomp_parsing",
     num_epochs: 500,
-    warmup_epochs: 1,
+    warmup_epochs: 100,
     patience: 1000,
     grad_norm: 5.0,
     # TODO: try to use grad clipping.

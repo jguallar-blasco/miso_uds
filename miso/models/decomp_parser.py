@@ -3,6 +3,7 @@ import logging
 from collections import OrderedDict
 
 import subprocess
+import pdb
 import math
 from overrides import overrides
 import torch
@@ -470,13 +471,14 @@ class DecompParser(Transduction):
 
             mask_binary = torch.gt(tgt_mask_copy, 0)
             target_attrs = tgt_attr[mask_binary==1]
+            tgt_attr = torch.gt(tgt_attr, 0).float()
  
             flat_true = target_attrs.reshape(-1).detach().cpu().numpy()
 
             loss = self._node_attribute_module.compute_loss(pred_dict["pred_attributes"],
                                                             pred_dict["pred_mask"],
                                                             tgt_attr, 
-                                                            tgt_attr_mask)
+                                                            mask_binary.float())
 
             self._decomp_metrics(pred_attrs,
                                  pred_mask,
@@ -506,6 +508,10 @@ class DecompParser(Transduction):
 
         pred_dict = self._edge_attribute_module(query, selected_key)
 
+        mask_binary = torch.ones_like(tgt_attr) # TODO (jimena): this means that when the mask is not provided, everything is unmasked. Figure out why at test time the mask is none right now
+        if tgt_attr_mask is not None:
+            mask_binary = torch.gt(tgt_attr_mask, 0).float()
+  
         if tgt_attr is not None:
             self._decomp_metrics(pred_dict["pred_attributes"],
                                  pred_dict["pred_mask"],
@@ -514,10 +520,12 @@ class DecompParser(Transduction):
                                  "edge"
                                  )
 
+            tgt_attr = torch.gt(tgt_attr, 0).float()
+
             loss = self._edge_attribute_module.compute_loss(pred_dict["pred_attributes"],
                                                             pred_dict["pred_mask"],
                                                             tgt_attr,
-                                                            tgt_attr_mask)
+                                                            mask_binary)
 
 
             loss = loss['loss']
