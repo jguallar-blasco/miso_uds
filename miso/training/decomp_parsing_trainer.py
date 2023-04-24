@@ -99,9 +99,6 @@ class DecompTrainer(Trainer):
         assert len(batch_group) == 1
         batch = batch_group[0]
         batch = nn_util.move_to_device(batch, self._cuda_devices[0])
-
-        # before running forward, set oracle to True
-        self.model.oracle = True
         output_dict = self.model(**batch)
 
         return output_dict
@@ -156,9 +153,6 @@ class DecompTrainer(Trainer):
             val_true_instances.append(batch_group)
 
             batch_output = self._validation_forward(batch_group)
-            # TODO (Jimena): make sure that there are no other errors relating to the fact that the 
-            # batch_output is now from self.model._training_forward and not self.model._test_forward
-
             loss = batch_output.pop("loss", None)
             if loss is not None:
                 # You shouldn't necessarily have to compute a loss for validation, so we allow for
@@ -170,7 +164,6 @@ class DecompTrainer(Trainer):
                 val_loss += loss.detach().cpu().numpy()
 
             # Update the description with the latest metrics
-            # TODO (Jimena): this line might be a problem 
             val_metrics = training_util.get_metrics(self.model, val_loss, batches_this_epoch)
             description = training_util.description_from_metrics(val_metrics)
             val_generator_tqdm.set_description(description, refresh=False)
@@ -179,7 +172,6 @@ class DecompTrainer(Trainer):
             peek = list(batch_output.values())[0]
             batch_size = peek.size(0) if isinstance(peek, torch.Tensor) else len(peek)
             instance_separated_output: List[Dict[str, numpy.ndarray]] = [{} for _ in range(batch_size)]
-            # TODO (Jimena): these lines might also raise errors
             for name, value in batch_output.items():
                 if isinstance(value, torch.Tensor):
                     # NOTE(markn): This is a hack because 0-dim pytorch tensors are not iterable.
@@ -195,10 +187,7 @@ class DecompTrainer(Trainer):
         # Now restore the original parameter values.
         if self._moving_average is not None:
             self._moving_average.restore()
-
-        # turn off s score if we're in pearson-only mode
-        if not self.model.oracle: 
-            self._update_validation_s_score(val_outputs, val_true_instances)
+        self._update_validation_s_score(val_outputs, val_true_instances)
 
         if hasattr(self, "_update_validation_syntax_score"):
             self._update_validation_syntax_score(val_outputs, val_true_instances)
@@ -485,6 +474,17 @@ def _from_params(cls,  # type: ignore
     model_save_interval = params.pop_float("model_save_interval", None)
     summary_interval = params.pop_int("summary_interval", 100)
     histogram_interval = params.pop_int("histogram_interval", None)
+    should_log_parameter_statistics = params.pop_bool("should_log_parameter_statistics", True)
+    should_log_learning_rate = params.pop_bool("should_log_learning_rate", False)
+    log_batch_size_period = params.pop_int("log_batch_size_period", None)
+    syntactic_method = params.pop("syntactic_method", None)
+    accumulate_batches = params.pop("accumulate_batches", 1) 
+
+    params.assert_empty(cls.__name__)
+    return cls(model=model,
+               optimizer=optimizer,
+               bert_optimizer=bert_optimizer,
+               iterator=iterator,
                train_dataset=train_data,
                validation_dataset=validation_data,
                validation_data_path=validation_data_path,
