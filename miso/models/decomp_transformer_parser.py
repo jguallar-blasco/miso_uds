@@ -534,7 +534,7 @@ class DecompTransformerParser(DecompParser):
                 edge_predictions["edge_type_query"],
                 edge_predictions["edge_type_key"],
                 edge_predictions["edge_heads"],
-                None, None
+                None, None # Should not be set to none
                 )
 
         edge_pred_loss = self._compute_edge_prediction_loss(

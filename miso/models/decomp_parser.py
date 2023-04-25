@@ -147,8 +147,8 @@ class DecompParser(Transduction):
         inputs = self._prepare_inputs(raw_inputs)
         if self.training or self.oracle:
             return self._training_forward(inputs)
-        else:
-            return self._test_forward(inputs)
+        #else:
+        #    return self._test_forward(inputs)
 
     def _take_one_step_node_prediction(self,
                                        last_predictions: torch.Tensor,

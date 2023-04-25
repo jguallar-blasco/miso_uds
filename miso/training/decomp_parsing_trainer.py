@@ -152,7 +152,7 @@ class DecompTrainer(Trainer):
         for batch_group in val_generator_tqdm:
             val_true_instances.append(batch_group)
 
-            batch_output = self._validation_forward(batch_group)
+            batch_output = self._validation_forward(batch_group) # error here
             loss = batch_output.pop("loss", None)
             if loss is not None:
                 # You shouldn't necessarily have to compute a loss for validation, so we allow for
