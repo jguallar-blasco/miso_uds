@@ -120,7 +120,7 @@ class DecompParser(Transduction):
         self._label_smoothing.reset_parameters(pad_index=self._vocab_pad_index)
         self._beam_search = BeamSearch(self._vocab_eos_index, self._max_decoding_steps, self._beam_size)
 
-        self.oracle = False 
+        self.oracle = True # only run training
 
     @overrides
     def get_metrics(self, reset: bool = False) -> Dict[str, float]:
