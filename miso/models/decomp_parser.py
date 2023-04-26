@@ -145,6 +145,7 @@ class DecompParser(Transduction):
 
     def forward(self, **raw_inputs: Dict) -> Dict:
         inputs = self._prepare_inputs(raw_inputs)
+        pdb.set_trace()
         if self.training or self.oracle:
             return self._training_forward(inputs)
         #else:
