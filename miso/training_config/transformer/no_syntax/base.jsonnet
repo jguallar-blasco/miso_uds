@@ -75,7 +75,7 @@
             },
             "hidden_size": 512,
             "input_size": 400,
-            "num_layers": 4,
+            "num_layers": 8,
             "source_attention_layer": {
                 "type": "global",
                 "attention": {
@@ -166,7 +166,7 @@
             },
             "hidden_size": 512,
             "input_size": 1118,
-            "num_layers": 4
+            "num_layers": 8
         },
         "encoder_pos_embedding": {
             "embedding_dim": 100,
@@ -263,7 +263,7 @@
         },
         "patience": 20,
         "semantics_only": false,
-        "validation_metric": "+pearson",
+        "validation_metric": "+s_f1",
         "validation_prediction_path": "decomp_validation.txt",
         "warmup_epochs": 5
     },
