@@ -9,6 +9,8 @@ from overrides import overrides
 import torch
 from allennlp.training.metrics import Metric
 
+import pdb
+
 logger = logging.getLogger(__name__) 
 
 
@@ -46,20 +48,30 @@ class DecompAttrMetrics(Metric):
         pred_attr, pred_mask, true_attr, true_mask = self.unwrap_to_tensors(pred_attr, pred_mask, true_attr, true_mask) 
 
         if node_or_edge is not "both":
+
+            #pdb.set_trace()
+
             pred_mask = torch.gt(pred_mask, 0)
             true_mask = torch.gt(true_mask, 0)
-
+            pred_attr = torch.gt(pred_attr, 0)
+            true_attr = torch.gt(true_attr, 0)
+            #print(f"from metrics calc, pred mask: {pred_mask}")
+            
+            
+            # Multiply attributes by mask (converts back to float)
             pred_attr = pred_attr * true_mask
             true_attr = true_attr * true_mask
 
             # for train time pearson, only look where attributes predicted
             pred_attr = pred_attr[true_mask==1]
             true_attr = true_attr[true_mask==1]
+          
 
             #flat_pred = (pred_attr * pred_mask).reshape((-1)).cpu().detach().numpy()
             flat_pred = pred_attr.reshape(-1).cpu().detach().numpy()
             flat_true = true_attr.reshape(-1).cpu().detach().numpy()
             flat_mask = true_mask.reshape(-1).cpu().detach().numpy()
+            #print(f"from metrics calc, true mask: {flat_mask}")
             try:
                 pearson_r, __ = pearsonr(flat_pred, flat_true)
             except ValueError:
@@ -73,12 +85,21 @@ class DecompAttrMetrics(Metric):
             tot_true = np.sum(flat_true_threshed)
 
             tp = np.sum(flat_pred_threshed * flat_true_threshed)
-            fp = np.sum(flat_pred_threshed * 1 - flat_true_threshed)
-            fn = np.sum(1 - flat_pred_threshed * flat_true_threshed)
+            # False positive
+            fp = np.sum(flat_pred_threshed * (1 - flat_true_threshed))
+            # False negative
+            fn = np.sum((1 - flat_pred_threshed) * flat_true_threshed)
 
             p = tp / (tp + fp) 
             r = tp / (tp + fn) 
+            #pdb.set_trace()
             f1 = 2 * p * r / (p + r) 
+
+            #print(f"from metrics calc, predicted: {flat_pred_threshed}")
+            #print(f"from metrics calc, gold: {flat_true_threshed}")
+            print(f"Recall: {r}")
+            print(f"Precision: {p}")
+            print(f"f1: {f1}")
 
         if node_or_edge == "node":
             self.node_pearson_r = pearson_r

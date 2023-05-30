@@ -187,7 +187,7 @@ class DecompTrainer(Trainer):
         # Now restore the original parameter values.
         if self._moving_average is not None:
             self._moving_average.restore()
-        self._update_validation_s_score(val_outputs, val_true_instances)
+        #self._update_validation_s_score(val_outputs, val_true_instances)
 
         if hasattr(self, "_update_validation_syntax_score"):
             self._update_validation_syntax_score(val_outputs, val_true_instances)
@@ -303,7 +303,9 @@ class DecompTrainer(Trainer):
                 self._tensorboard.log_learning_rates(self.model, self.optimizer)
 
                 self._tensorboard.add_train_scalar("loss/loss_train", metrics["loss"])
-                self._tensorboard.log_metrics({"epoch_metrics/" + k: v for k, v in metrics.items()})
+                self._tensorboard.log_metrics({"epoch_metrics/" + k: v for k, v in metrics.items()}) # logging metrics
+                #if epoch >= 80:
+                #    pdb.set_trace()
 
             if self._tensorboard.should_log_histograms_this_batch():
                 self._tensorboard.log_histograms(self.model, histogram_parameters)

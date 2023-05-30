@@ -35,6 +35,8 @@ from miso.metrics.pearson_r import pearson_r
 #from miso.commands.s_score import Scorer, compute_args, ComputeTup
 #from miso.losses import LossFunctionDict
 
+import pdb
+
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
 @Model.register("decomp_transformer_parser")
@@ -474,8 +476,29 @@ class DecompTransformerParser(DecompParser):
         loss = node_attribute_outputs['loss'] + edge_attribute_outputs['loss']
 		# deleted node_pred_loss and edge_pred_loss
 
-        # compute combined pearson 
-        self._decomp_metrics(None, None, None, None, "both")
+        nao = node_attribute_outputs['loss']
+        eao = edge_attribute_outputs['loss']
+        #print(f"node attr outputs: {nao} --------------------------")
+        #print(f"edge attr loss: {eao} --------------------------")
+        #print(f"combined loss: {loss}")
+
+        # compute combined pearson
+        #self._decomp_metrics(None, None, None, None, "both")
+        # compute f1 and pearson metrics for edges and nodes 
+        #pdb.set_trace()
+        self._decomp_metrics(
+            node_attribute_outputs['pred_dict']['pred_attributes'], 
+            node_attribute_outputs['pred_dict']['pred_mask'], 
+            inputs["node_attribute_truth"], 
+            inputs["node_attribute_mask"], 
+            "node")
+        self._decomp_metrics(
+            edge_attribute_outputs['pred_dict']['pred_attributes'], 
+            edge_attribute_outputs['pred_dict']['pred_mask'], 
+            inputs["edge_attribute_truth"], 
+            inputs["edge_attribute_mask"], 
+            "edge")
+
 
         return dict(loss=loss, 
                     node_attributes = node_attribute_outputs['pred_dict']['pred_attributes'],

@@ -263,7 +263,7 @@
         },
         "patience": 20,
         "semantics_only": false,
-        "validation_metric": "+s_f1",
+        "validation_metric": "+edge_f1",
         "validation_prediction_path": "decomp_validation.txt",
         "warmup_epochs": 5
     },

@@ -137,6 +137,8 @@ class DecompParser(Transduction):
             node_pearson=decomp_metrics["node_pearson_r"],
             edge_pearson=decomp_metrics["edge_pearson_r"],
             pearson=decomp_metrics["pearson_r"],
+            node_f1=decomp_metrics["node_pearson_F1"],
+            edge_f1=decomp_metrics["edge_pearson_F1"], 
             uas=edge_pred_metrics["UAS"] * 100,
             las=edge_pred_metrics["LAS"] * 100,
         )
@@ -145,7 +147,7 @@ class DecompParser(Transduction):
 
     def forward(self, **raw_inputs: Dict) -> Dict:
         inputs = self._prepare_inputs(raw_inputs)
-        pdb.set_trace()
+        #pdb.set_trace()
         if self.training or self.oracle:
             return self._training_forward(inputs)
         #else:
@@ -501,6 +503,7 @@ class DecompParser(Transduction):
                                       tgt_attr,
                                       tgt_attr_mask):
 
+               
         batch_size = key.size(0)
         batch_index = torch.arange(0, batch_size).view(batch_size, 1).type_as(edge_heads)
         # [batch_size, query_length, hidden_size]
@@ -512,6 +515,7 @@ class DecompParser(Transduction):
         mask_binary = torch.ones_like(tgt_attr) # TODO (jimena): this means that when the mask is not provided, everything is unmasked. Figure out why at test time the mask is none right now
         if tgt_attr_mask is not None:
             mask_binary = torch.gt(tgt_attr_mask, 0).float()
+            #print(f"mask binary sent to loss: {mask_binary}")
   
         if tgt_attr is not None:
             self._decomp_metrics(pred_dict["pred_attributes"],
@@ -604,6 +608,8 @@ class DecompParser(Transduction):
 
         loss = node_pred_loss["loss_per_node"] + edge_pred_loss["loss_per_node"] + \
                node_attribute_outputs['loss'] + edge_attribute_outputs['loss']
+    
+
 
         # compute combined pearson 
         self._decomp_metrics(None, None, None, None, "both")
@@ -679,6 +685,8 @@ class DecompParser(Transduction):
         )
 
         loss = -log_probs[:, 0].sum() / edge_pred_loss["num_nodes"] + edge_pred_loss["loss_per_node"]
+        #print(f"edge pred loss: {edge_pred_loss["num_nodes"]}")
+        #print(f"edge pred loss: {edge_pred_loss["num_nodes"]}")
 
         outputs = dict(
             loss=loss,
@@ -696,6 +704,10 @@ class DecompParser(Transduction):
         return outputs
 
     def compute_training_loss(self, node_loss, edge_loss, node_attr_loss, edge_attr_loss, biaffine_loss):
+        #print(f"node loss: {node_loss} --------------------------")
+        #print(f"edge loss: {edge_loss} --------------------------")
+        #print(f"node attr loss: {node_attr_loss} --------------------------")
+        #print(f"edge attr loss: {edge_attr_loss} --------------------------")
         sem_loss = node_loss + edge_loss + node_attr_loss + edge_attr_loss
         syn_loss = biaffine_loss
 

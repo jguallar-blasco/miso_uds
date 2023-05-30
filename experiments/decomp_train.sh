@@ -106,7 +106,8 @@ function eval_sem() {
 
 function eval_attr() {
     echo "Evaluating a transductive model for decomp parsing..."
-    model_file=${CHECKPOINT_DIR}/ckpt/model.tar.gz
+    #model_file=${CHECKPOINT_DIR}/ckpt/model.tar.gz
+    model_file=/brtx/603-nvme2/jgualla1/full_run_bool_loss/ckpt/model.tar.gz
     output_file=${CHECKPOINT_DIR}/${TEST_DATA}.pred.txt
     export PYTHONPATH=$(pwd)/miso:${PYTHONPATH}
     echo ${PYTHONPATH}

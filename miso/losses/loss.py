@@ -57,6 +57,12 @@ class BCEWithLogitsLoss(Loss):
         self.reduction = reduction
 
     def forward(self, input: Tensor, target: Tensor) -> Tensor:
+        sigmoid_input = torch.sigmoid(input)
+        bool_input = torch.gt(sigmoid_input, 0)
+        bool_target = torch.gt(target, 0)
+        bool_target = bool_target.reshape(-1).cpu().detach().numpy()
+        #print(f"from loss function, input tensor: {bool_input}")
+        #print(f"from loss function, target tensor: {bool_target}")
         return F.binary_cross_entropy_with_logits(input, target,
                                                   self.weight,
                                                   pos_weight=self.pos_weight,

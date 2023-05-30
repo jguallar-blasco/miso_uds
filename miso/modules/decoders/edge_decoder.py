@@ -4,6 +4,7 @@ import torch
 from miso.metrics.continuous_metrics import ContinuousMetric
 from miso.modules.linear.bilinear import BiLinear
 from miso.losses.loss import MSECrossEntropyLoss
+from miso.losses.loss import BCEWithLogitsLoss, Loss
 
 class MLP(torch.nn.Module):
     def __init__(self, input_dim, hidden_dim, output_dim, n_layers, dropout=0.20):
@@ -97,8 +98,9 @@ class EdgeAttributeDecoder(torch.nn.Module):
         mask_loss = self.mask_loss_function(predicted_mask, edge_mask_binary) * self.loss_multiplier
         self.metrics(attr_loss.item())
         self.metrics(mask_loss.item())
+        #print(f"attr_loss: {attr_loss}, (mask loss not included)")
         return dict(
-                loss = attr_loss + mask_loss)
+                loss = attr_loss)# + mask_loss)
 
     @classmethod
     def from_params(cls, params, **kwargs):
@@ -107,7 +109,7 @@ class EdgeAttributeDecoder(torch.nn.Module):
                    params['n_layers'],
                    params['output_dim'],
                    params.get("loss_multiplier", 1),
-                   params.get("loss_function",  torch.nn.MSELoss()),
+                   params.get("loss_function",  BCEWithLogitsLoss()),
                    params.get("share_networks", False))
 
 
